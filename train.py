@@ -97,8 +97,10 @@ class Trainer:
 
 
 def main(args):
-    exp_name = f"unet_cod_{datetime.now()}"
+    exp_name = f"unet_cod_sgd_{datetime.now()}"
     exp_dir = Path(args.exp_root) / exp_name
+    exp_dir.mkdir(parents=True, exist_ok=True)
+
     logging.basicConfig(filename=exp_dir / "exp.log", encoding="utf-8", level=logging.INFO)
 
     transform = get_transform(args.resize)
@@ -129,7 +131,9 @@ def main(args):
     model = torch.compile(model)
 
     criterion = StructureLoss()
-    optim = torch.optim.Adam(model.parameters(), lr=args.lr)
+    # optim = torch.optim.Adam(model.parameters(), lr=args.lr)
+    optim = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    # optim = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
 
     trainer = Trainer(train_loader, val_loader, model, criterion, optim, exp_dir, args)
     trainer.train(args.epochs)

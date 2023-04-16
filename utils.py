@@ -14,6 +14,7 @@ def get_argparser():
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--weight_decay", type=float, default=1e-4)
     parser.add_argument("--clip", type=float, default=0.5)
 
     parser.add_argument("--load", type=str, default="")
